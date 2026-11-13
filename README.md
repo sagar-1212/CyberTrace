@@ -1,7 +1,7 @@
 # CyberTrace
 ### Financial Crime Intelligence & Predictive Analytics Platform
 
-FinTrace is a full-stack financial intelligence platform designed to analyse suspicious financial transactions, identify potential money mule networks, trace multi-hop money movement and predict possible ATM cash withdrawal locations using machine learning and geospatial analytics.
+Cybertrace is a full-stack financial intelligence platform designed to analyse suspicious financial transactions, identify potential money mule networks, trace multi-hop money movement and predict possible ATM cash withdrawal locations using machine learning and geospatial analytics.
 
 The platform combines graph-based transaction analysis, predictive modelling, interactive visualizations and investigation management to support financial crime analysis and decision-making.
 
@@ -9,7 +9,7 @@ The platform combines graph-based transaction analysis, predictive modelling, in
 
 Financial fraud often involves multiple accounts and transactions through which funds are transferred, layered and eventually withdrawn. Identifying these patterns manually can be time-consuming and challenging.
 
-FinTrace aims to simplify this process by providing a unified environment for analysing transaction networks, identifying suspicious account relationships, examining geographic patterns and generating predictive insights.
+CyberTrace aims to simplify this process by providing a unified environment for analysing transaction networks, identifying suspicious account relationships, examining geographic patterns and generating predictive insights.
 
 ## Key Features
 
@@ -84,7 +84,7 @@ FinTrace aims to simplify this process by providing a unified environment for an
 
 ## System Architecture
 
-FinTrace follows a modular full-stack architecture consisting of three primary technical layers.
+Cybertrace follows a modular full-stack architecture consisting of three primary technical layers.
 
 **Frontend**
 Provides the user interface, dashboards, transaction visualizations, graph analysis, maps and investigation tools.
@@ -220,7 +220,7 @@ python ml/evaluate.py
 
 ## Data and Privacy
 
-FinTrace supports synthetic financial transaction scenarios for development, testing and demonstration.
+CyberTrace supports synthetic financial transaction scenarios for development, testing and demonstration.
 
 Synthetic records must not be interpreted as genuine bank transactions, real customer information or verified criminal investigations.
 
@@ -240,8 +240,8 @@ Sensitive financial information should be protected through appropriate security
 
 ## Project Status
 
-FinTrace is an evolving software project. Its modules and integrations are subject to ongoing development, testing and validation.
+CyberTrace is an evolving software project. Its modules and integrations are subject to ongoing development, testing and validation.
 
 ---
 
-**FinTrace — Turning Financial Transaction Data into Actionable Intelligence.**
+**CyberTrace — Turning Financial Transaction Data into Actionable Intelligence.**
