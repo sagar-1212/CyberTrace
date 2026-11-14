@@ -14,3 +14,6 @@ data/crypto/raw/
 !data/crypto/samples/*.csv
 elliptic_*.csv
 data/crypto/processed/large_*.json
+
+__pycache__/
+*.py[cod]
