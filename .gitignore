@@ -17,3 +17,6 @@ data/crypto/processed/large_*.json
 
 __pycache__/
 *.py[cod]
+
+__pycache__/
+*.py[cod]
