@@ -16,6 +16,8 @@ import {
   Link2,
   Building2,
   Globe,
+  UserCheck,
+  Coins,
 } from 'lucide-react';
 import { Alert } from '../../types';
 
@@ -23,6 +25,9 @@ export type NavTab =
   | 'overview'
   | 'complaints'
   | 'transactions'
+  | 'mule_detection'
+  | 'crypto_forensics'
+  | 'cross_rail'
   | 'network'
   | 'withdrawals'
   | 'prediction'
@@ -56,19 +61,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'overview', label: 'Command Overview', icon: <LayoutDashboard className="w-4 h-4" /> },
     { id: 'complaints', label: 'NCRP Complaints', icon: <FileText className="w-4 h-4" /> },
     { id: 'transactions', label: 'Layering & Transactions', icon: <ArrowRightLeft className="w-4 h-4" /> },
+    { id: 'mule_detection', label: 'Intelligent Mule Detection', icon: <UserCheck className="w-4 h-4" /> },
     { id: 'network', label: 'Mule Network Topology', icon: <Share2 className="w-4 h-4" /> },
     { id: 'withdrawals', label: 'Withdrawal Patterns', icon: <History className="w-4 h-4" /> },
     { id: 'prediction', label: 'Withdrawal Predictor', icon: <Target className="w-4 h-4" /> },
     { id: 'map', label: 'GIS & Hotspot Map', icon: <MapPin className="w-4 h-4" /> },
     {
       id: 'alerts',
-      label: 'Alert Dispatch',
+      label: 'Early Warnings & Alerts',
       icon: <Bell className="w-4 h-4" />,
       badge: pendingAlertsCount > 0 ? pendingAlertsCount : undefined,
     },
     { id: 'investigations', label: 'Investigation Casefile', icon: <ShieldCheck className="w-4 h-4" /> },
     { id: 'reports', label: 'Police Dossier & Report', icon: <FileSpreadsheet className="w-4 h-4" /> },
     { id: 'blockchain', label: 'Blockchain Forensics', icon: <Link2 className="w-4 h-4" /> },
+    { id: 'crypto_forensics', label: 'Bitcoin Crypto Forensics', icon: <Coins className="w-4 h-4" /> },
+    { id: 'cross_rail', label: 'Cross-Rail Pathway', icon: <ArrowRightLeft className="w-4 h-4 text-purple-500" /> },
     { id: 'settings', label: 'Controls & System Config', icon: <Settings className="w-4 h-4" /> },
   ];
 

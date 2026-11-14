@@ -25,6 +25,9 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import { Alert, AlertStatus, Complaint } from '../types';
+import { EarlyWarningAlertsSection } from '../modules/earlyWarning/components/EarlyWarningAlertsSection';
+import { INITIAL_EARLY_WARNINGS } from '../modules/earlyWarning/earlyWarningData';
+import { EarlyWarningAlert, EarlyWarningStatus } from '../modules/earlyWarning/types';
 
 interface AlertsPageProps {
   alerts: Alert[];
@@ -41,10 +44,37 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
   onSelectComplaint,
   onNavigateTab,
 }) => {
+  const [activeSystemTab, setActiveSystemTab] = useState<'EARLY_WARNING' | 'DISPATCH_GATEWAY'>('EARLY_WARNING');
+  const [earlyWarningAlerts, setEarlyWarningAlerts] = useState<EarlyWarningAlert[]>(INITIAL_EARLY_WARNINGS);
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [dispatchToast, setDispatchToast] = useState<string | null>(null);
   const [activeDispatchAlert, setActiveDispatchAlert] = useState<Alert | null>(null);
+
+  const handleUpdateEarlyWarningStatus = (alertId: string, status: EarlyWarningStatus, notes?: string) => {
+    setEarlyWarningAlerts(prev =>
+      prev.map(a => {
+        if (a.alertId === alertId) {
+          return {
+            ...a,
+            status,
+            auditHistory: [
+              {
+                auditId: `AUD-${Date.now()}`,
+                timestamp: new Date().toISOString(),
+                action: 'Status Changed',
+                actorName: 'Investigator',
+                actorRole: 'Reviewing Officer',
+                notes: notes || `Status changed to ${status}`,
+              },
+              ...a.auditHistory,
+            ],
+          };
+        }
+        return a;
+      })
+    );
+  };
   const [selectedChannels, setSelectedChannels] = useState<{
     sms: boolean;
     email: boolean;
@@ -136,7 +166,47 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
         </div>
       </div>
 
-      {/* Simulated Dispatch Toast */}
+      {/* Top Tab Bar: Early Warning vs Dispatch Gateway */}
+      <div className="flex border-b border-slate-200 dark:border-slate-800 text-sm font-medium gap-2">
+        <button
+          onClick={() => setActiveSystemTab('EARLY_WARNING')}
+          className={`pb-3 px-3 transition-all flex items-center gap-2 border-b-2 ${
+            activeSystemTab === 'EARLY_WARNING'
+              ? 'border-purple-600 text-purple-600 dark:text-purple-400 font-bold'
+              : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900'
+          }`}
+        >
+          <ShieldAlert className="w-4 h-4 text-purple-500" />
+          Financial Crime Early Warning System
+          <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300">
+            {earlyWarningAlerts.filter(a => a.status === 'New' || a.status === 'Under Review').length} Active
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveSystemTab('DISPATCH_GATEWAY')}
+          className={`pb-3 px-3 transition-all flex items-center gap-2 border-b-2 ${
+            activeSystemTab === 'DISPATCH_GATEWAY'
+              ? 'border-rose-600 text-rose-600 dark:text-rose-400 font-bold'
+              : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900'
+          }`}
+        >
+          <Radio className="w-4 h-4 text-rose-500" />
+          ATM Field Interception Gateway
+          <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300">
+            {alerts.filter(a => a.status === 'New' || a.status === 'Under Review').length}
+          </span>
+        </button>
+      </div>
+
+      {activeSystemTab === 'EARLY_WARNING' ? (
+        <EarlyWarningAlertsSection
+          alerts={earlyWarningAlerts}
+          onUpdateAlertStatus={handleUpdateEarlyWarningStatus}
+          onNavigateTab={onNavigateTab}
+        />
+      ) : (
+        <>
       {dispatchToast && (
         <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-lg text-emerald-800 dark:text-emerald-300 text-xs font-medium flex items-center gap-2 shadow-2xs animate-in fade-in duration-200">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
@@ -318,6 +388,8 @@ export const AlertsPage: React.FC<AlertsPageProps> = ({
           );
         })}
       </div>
+        </>
+      )}
 
       {/* Multi-Channel Real-Time Dispatch Modal */}
       {activeDispatchAlert && (

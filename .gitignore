@@ -6,3 +6,11 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Crypto Datasets (Prevent raw & large datasets from being uploaded to GitHub)
+data/crypto/raw/
+*.csv
+!data/crypto/raw/README.md
+!data/crypto/samples/*.csv
+elliptic_*.csv
+data/crypto/processed/large_*.json

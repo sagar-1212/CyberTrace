@@ -1,0 +1,47 @@
+{
+  "1": {
+    "nodesCount": 3,
+    "illicitCount": 1,
+    "sampleTxIds": [
+      "230425980",
+      "230459870",
+      "230460317"
+    ]
+  },
+  "2": {
+    "nodesCount": 3,
+    "illicitCount": 1,
+    "sampleTxIds": [
+      "5530458",
+      "230133989",
+      "230460318"
+    ]
+  },
+  "3": {
+    "nodesCount": 3,
+    "illicitCount": 2,
+    "sampleTxIds": [
+      "232022460",
+      "232338699",
+      "230460319"
+    ]
+  },
+  "4": {
+    "nodesCount": 3,
+    "illicitCount": 0,
+    "sampleTxIds": [
+      "232438397",
+      "230460315",
+      "230460320"
+    ]
+  },
+  "5": {
+    "nodesCount": 3,
+    "illicitCount": 1,
+    "sampleTxIds": [
+      "230460314",
+      "230460316",
+      "230460321"
+    ]
+  }
+}

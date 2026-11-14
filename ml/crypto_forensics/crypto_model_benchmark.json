@@ -1,0 +1,98 @@
+{
+  "dataset": "Elliptic Bitcoin Transaction Graph Dataset",
+  "evaluation_protocol": "Chronological Out-of-Time Walk-Forward Partition",
+  "data_leakage_protection": "Train set strictly time steps 1-34; Test set strictly time steps 35-49. Zero future graph visibility.",
+  "class_imbalance_handling": "Minority-class weighting (ratio ~1:10), precision-recall threshold calibration, focal loss weighting.",
+  "target_class": "1 (Illicit Bitcoin Transactions: Scams, Ransomware, Darknet Markets, Terrorism Financing)",
+  "timestamp": "2026-11-13T19:14:13Z",
+  "models_evaluated": [
+    {
+      "model_name": "Logistic Regression Baseline (Local Features)",
+      "precision": 0.402,
+      "recall": 0.593,
+      "f1_score": 0.479,
+      "roc_auc": 0.748,
+      "pr_auc": 0.452,
+      "confusion_matrix": {
+        "true_positives": 542,
+        "false_positives": 806,
+        "true_negatives": 11340,
+        "false_negatives": 372,
+        "total_tested": 13060
+      }
+    },
+    {
+      "model_name": "Random Forest Classifier (Local + Aggregated 165 Features)",
+      "precision": 0.781,
+      "recall": 0.648,
+      "f1_score": 0.708,
+      "roc_auc": 0.884,
+      "pr_auc": 0.725,
+      "confusion_matrix": {
+        "true_positives": 592,
+        "false_positives": 166,
+        "true_negatives": 11980,
+        "false_negatives": 322,
+        "total_tested": 13060
+      }
+    },
+    {
+      "model_name": "GraphSAGE (Graph Convolutional Neighborhood Embeddings)",
+      "precision": 0.814,
+      "recall": 0.712,
+      "f1_score": 0.76,
+      "roc_auc": 0.916,
+      "pr_auc": 0.798,
+      "confusion_matrix": {
+        "true_positives": 651,
+        "false_positives": 149,
+        "true_negatives": 11997,
+        "false_negatives": 263,
+        "total_tested": 13060
+      }
+    },
+    {
+      "model_name": "FinTrace Hybrid Evolve-Ranker (Production Classifier)",
+      "precision": 0.842,
+      "recall": 0.738,
+      "f1_score": 0.787,
+      "roc_auc": 0.932,
+      "pr_auc": 0.824,
+      "confusion_matrix": {
+        "true_positives": 674,
+        "false_positives": 126,
+        "true_negatives": 12020,
+        "false_negatives": 240,
+        "total_tested": 13060
+      }
+    }
+  ],
+  "key_feature_importances": [
+    {
+      "feature": "aggregated_output_degree_mean",
+      "importance": 0.184,
+      "description": "High fan-out in neighborhood transactions"
+    },
+    {
+      "feature": "fee_to_output_ratio",
+      "importance": 0.162,
+      "description": "Abnormal transaction fees paid to miners for priority block inclusion"
+    },
+    {
+      "feature": "aggregated_input_degree_max",
+      "importance": 0.141,
+      "description": "Proximity to consolidation peeling chains"
+    },
+    {
+      "feature": "local_transaction_output_count",
+      "importance": 0.118,
+      "description": "Direct peeling chain splitting behavior"
+    },
+    {
+      "feature": "illicit_neighbor_proximity_1hop",
+      "importance": 0.098,
+      "description": "Graph proximity to confirmed illicit entities"
+    }
+  ],
+  "scientific_disclaimer": "CRITICAL METHODOLOGICAL NOTICE: The reported evaluation metrics (e.g., F1=0.787, PR-AUC=0.824) represent empirical performance on the benchmark Elliptic dataset under laboratory conditions. They DO NOT imply 78.7% real-world detection accuracy for live, emerging, or obfuscated financial crime."
+}

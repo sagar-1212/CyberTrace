@@ -1,0 +1,59 @@
+{
+  "isValid": true,
+  "checkedAt": "2026-11-13T20:54:05.701Z",
+  "filesChecked": [
+    {
+      "fileName": "elliptic_txs_classes.csv",
+      "exists": true,
+      "sizeBytes": 220,
+      "lineCount": 16,
+      "path": "C:\\Users\\siddh\\OneDrive\\Desktop\\Fintraceeee\\cybertrace\\data\\crypto\\samples\\elliptic_txs_classes.sample.csv"
+    },
+    {
+      "fileName": "elliptic_txs_edgelist.csv",
+      "exists": true,
+      "sizeBytes": 249,
+      "lineCount": 13,
+      "path": "C:\\Users\\siddh\\OneDrive\\Desktop\\Fintraceeee\\cybertrace\\data\\crypto\\samples\\elliptic_txs_edgelist.sample.csv"
+    },
+    {
+      "fileName": "elliptic_txs_features.csv",
+      "exists": true,
+      "sizeBytes": 23429,
+      "lineCount": 15,
+      "path": "C:\\Users\\siddh\\OneDrive\\Desktop\\Fintraceeee\\cybertrace\\data\\crypto\\samples\\elliptic_txs_features.sample.csv"
+    }
+  ],
+  "headerValidations": [
+    {
+      "fileName": "elliptic_txs_classes.csv",
+      "expectedHeader": "txId,class",
+      "actualHeader": "txId,class",
+      "matches": true
+    },
+    {
+      "fileName": "elliptic_txs_edgelist.csv",
+      "expectedHeader": "txId1,txId2",
+      "actualHeader": "txId1,txId2",
+      "matches": true
+    }
+  ],
+  "columnValidations": [
+    {
+      "fileName": "elliptic_txs_features.csv",
+      "expectedColumns": 167,
+      "actualColumns": 167,
+      "matches": true
+    }
+  ],
+  "integrityMetrics": {
+    "totalNodes": 15,
+    "totalEdges": 12,
+    "danglingEdgesCount": 0,
+    "invalidClassesCount": 0,
+    "nullOrNanFeaturesCount": 0
+  },
+  "errors": [],
+  "warnings": [],
+  "executionDurationMs": 2
+}

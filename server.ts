@@ -1,7 +1,9 @@
+
 import express, { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { execFile } from 'child_process';
 import { GoogleGenAI } from '@google/genai';
@@ -21,6 +23,12 @@ import { executeWithdrawalPrediction } from './src/utils/predictionEngine';
 import { computeAccountNetwork } from './src/utils/graphAnalytics';
 import { Alert, AuditLog, Complaint, Investigation, WithdrawalPrediction } from './src/types';
 import { generateScenarioEvents, SCENARIO_METADATA, ScenarioType } from './simulator/generator';
+import { IntelligentMuleDetectionEngine } from './src/modules/muleDetection/muleDetectionEngine';
+import { CryptoForensicsEngine } from './src/modules/cryptoForensics/cryptoGraphEngine';
+import { PRIMARY_CROSS_RAIL_CASE } from './src/modules/crossRail/crossRailData';
+import { CrossRailEngine } from './src/modules/crossRail/crossRailEngine';
+import { EarlyWarningEngine } from './src/modules/earlyWarning/earlyWarningEngine';
+import { INITIAL_EARLY_WARNINGS } from './src/modules/earlyWarning/earlyWarningData';
 
 dotenv.config();
 
@@ -284,7 +292,7 @@ app.post('/api/v1/simulator/generate', (req: Request, res: Response) => {
   try {
     const { scenario = 'stable_hotspot', count, inject = true } = req.body || {};
     const result = generateScenarioEvents(scenario as ScenarioType, { caseCount: count });
-    
+
     if (inject) {
       result.complaints.forEach((comp: any) => {
         dbComplaints.unshift(comp as Complaint);
@@ -300,6 +308,280 @@ app.post('/api/v1/simulator/generate', (req: Request, res: Response) => {
     res.json(result);
   } catch (err: any) {
     res.status(500).json({ error: 'Simulation generation failed', message: err.message });
+  }
+});
+
+// Intelligent Mule Detection System Endpoints (Phase 2)
+app.get('/api/v1/mules', (req: Request, res: Response) => {
+  try {
+    const { complaintId } = req.query;
+    let relevantTxns = dbTransactions;
+    if (complaintId && typeof complaintId === 'string') {
+      const filtered = dbTransactions.filter((t: any) => t.complaintId === complaintId);
+      if (filtered.length > 0) relevantTxns = filtered;
+    }
+    const engine = new IntelligentMuleDetectionEngine(dbAccounts, relevantTxns);
+    const result = engine.runFullMuleDetection();
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Mule detection failed', message: err.message });
+  }
+});
+
+app.get('/api/v1/mules/clusters', (req: Request, res: Response) => {
+  try {
+    const engine = new IntelligentMuleDetectionEngine(dbAccounts, dbTransactions);
+    const clusters = engine.identifySyndicateClusters();
+    res.json(clusters);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Mule cluster retrieval failed', message: err.message });
+  }
+});
+
+app.get('/api/v1/mules/:accountId', (req: Request, res: Response) => {
+  try {
+    const engine = new IntelligentMuleDetectionEngine(dbAccounts, dbTransactions);
+    const profile = engine.analyzeAccount(req.params.accountId);
+    res.json(profile);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Account mule analysis failed', message: err.message });
+  }
+});
+
+app.post('/api/v1/mules/:accountId/action', (req: Request, res: Response) => {
+  try {
+    const { action, note, status } = req.body || {};
+    const accIndex = dbAccounts.findIndex(
+      (a: any) => a.id === req.params.accountId || a.accountReference === req.params.accountId
+    );
+    if (accIndex !== -1 && status) {
+      dbAccounts[accIndex].riskStatus = status;
+    }
+
+    const log: AuditLog = {
+      id: `AUD-${Date.now()}`,
+      investigationId: `INV-MULE-${req.params.accountId}`,
+      complaintId: 'CMP-2026-0842',
+      userId: CURRENT_INVESTIGATOR.id,
+      userName: CURRENT_INVESTIGATOR.name,
+      userRole: CURRENT_INVESTIGATOR.role,
+      action: action ? `MULE_ACTION_${action.toUpperCase().replace(/\s+/g, '_')}` : 'MULE_STATUS_UPDATED',
+      details: note || `Investigator updated status for mule candidate ${req.params.accountId}: ${status || action}`,
+      ipAddress: '10.14.22.84',
+      timestamp: new Date().toISOString(),
+    };
+    dbAuditLogs.unshift(log);
+
+    res.json({ success: true, message: 'Mule action recorded', accountId: req.params.accountId });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Mule action registration failed', message: err.message });
+  }
+});
+
+// Elliptic Crypto Dataset Endpoints (Phase 3)
+app.get('/api/v1/crypto/dataset/metadata', (req: Request, res: Response) => {
+  try {
+    const metaPath = path.resolve(__dirname, 'data', 'crypto', 'metadata', 'dataset_metadata.json');
+    if (fs.existsSync(metaPath)) {
+      const data = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+      return res.json(data);
+    }
+    res.status(404).json({ error: 'Dataset metadata not found. Ingestion may be pending.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Metadata read failed', message: err.message });
+  }
+});
+
+app.get('/api/v1/crypto/dataset/validation', (req: Request, res: Response) => {
+  try {
+    const valPath = path.resolve(__dirname, 'data', 'crypto', 'metadata', 'validation_report.json');
+    if (fs.existsSync(valPath)) {
+      const data = JSON.parse(fs.readFileSync(valPath, 'utf-8'));
+      return res.json(data);
+    }
+    res.status(404).json({ error: 'Validation report not found.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Validation read failed', message: err.message });
+  }
+});
+
+app.get('/api/v1/crypto/dataset/sample', (req: Request, res: Response) => {
+  try {
+    const graphPath = path.resolve(__dirname, 'data', 'crypto', 'processed', 'elliptic_graph.json');
+    if (fs.existsSync(graphPath)) {
+      const graph = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
+      return res.json({
+        metadata: graph.metadata,
+        nodes: (graph.nodes || []).slice(0, 50),
+        edges: (graph.edges || []).slice(0, 50),
+      });
+    }
+    res.status(404).json({ error: 'Processed graph not found. Run ingestion first.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Sample retrieval failed', message: err.message });
+  }
+});
+
+app.get('/api/v1/crypto/dataset/transaction/:txId', (req: Request, res: Response) => {
+  try {
+    const graphPath = path.resolve(__dirname, 'data', 'crypto', 'processed', 'elliptic_graph.json');
+    if (fs.existsSync(graphPath)) {
+      const graph = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
+      const node = (graph.nodes || []).find((n: any) => n.txId === req.params.txId);
+      if (!node) {
+        return res.status(404).json({ error: `Transaction ${req.params.txId} not found in Elliptic dataset.` });
+      }
+      const relatedEdges = (graph.edges || []).filter(
+        (e: any) => e.sourceTxId === req.params.txId || e.targetTxId === req.params.txId
+      );
+      return res.json({ node, edges: relatedEdges });
+    }
+    res.status(404).json({ error: 'Processed graph not found.' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Transaction lookup failed', message: err.message });
+  }
+});
+
+// Crypto Forensics Module Endpoints (Phase 4)
+app.get('/api/v1/crypto/forensics/overview', (req: Request, res: Response) => {
+  try {
+    const cryptoEngine = new CryptoForensicsEngine();
+    const overview = cryptoEngine.getOverview();
+    res.json(overview);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to retrieve crypto forensics overview', message: err.message });
+  }
+});
+
+app.get('/api/v1/crypto/forensics/transaction/:txId', (req: Request, res: Response) => {
+  try {
+    const cryptoEngine = new CryptoForensicsEngine();
+    const profile = cryptoEngine.getTransactionProfile(req.params.txId);
+    if (!profile) {
+      return res.status(404).json({ error: `Bitcoin transaction ${req.params.txId} not found.` });
+    }
+    const ego = cryptoEngine.extractEgoGraph(req.params.txId, 2);
+    res.json({ profile, egoGraph: ego });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to retrieve transaction profile', message: err.message });
+  }
+});
+
+app.get('/api/v1/crypto/forensics/pathway', (req: Request, res: Response) => {
+  try {
+    const { from, to } = req.query;
+    if (!from || !to || typeof from !== 'string' || typeof to !== 'string') {
+      return res.status(400).json({ error: 'Both "from" and "to" transaction query parameters are required.' });
+    }
+    const cryptoEngine = new CryptoForensicsEngine();
+    const result = cryptoEngine.findPathway(from, to);
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to reconstruct crypto pathway', message: err.message });
+  }
+});
+
+app.get('/api/v1/crypto/forensics/benchmark', (req: Request, res: Response) => {
+  try {
+    const bPath = path.resolve(__dirname, 'ml', 'crypto_forensics', 'crypto_model_benchmark.json');
+    if (fs.existsSync(bPath)) {
+      const benchmark = JSON.parse(fs.readFileSync(bPath, 'utf-8'));
+      return res.json(benchmark);
+    }
+    const cryptoEngine = new CryptoForensicsEngine();
+    res.json(cryptoEngine.getOverview().benchmark);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Benchmark metrics retrieval failed', message: err.message });
+  }
+});
+
+// Cross-Rail Financial Pathway Endpoints
+app.get('/api/v1/crossrail/cases', (_req: Request, res: Response) => {
+  try {
+    res.json([
+      {
+        caseId: PRIMARY_CROSS_RAIL_CASE.caseId,
+        caseTitle: PRIMARY_CROSS_RAIL_CASE.caseTitle,
+        complaintNumber: PRIMARY_CROSS_RAIL_CASE.complaintNumber,
+        victimReference: PRIMARY_CROSS_RAIL_CASE.victimReference,
+        investigatorBadge: PRIMARY_CROSS_RAIL_CASE.investigatorBadge,
+        createdAt: PRIMARY_CROSS_RAIL_CASE.createdAt,
+        totalBankingFlowINR: PRIMARY_CROSS_RAIL_CASE.totalBankingFlowINR,
+        totalCryptoFlowBTC: PRIMARY_CROSS_RAIL_CASE.totalCryptoFlowBTC,
+        totalCrossRailBridgedINR: PRIMARY_CROSS_RAIL_CASE.totalCrossRailBridgedINR,
+        untracedGapAmountINR: PRIMARY_CROSS_RAIL_CASE.untracedGapAmountINR,
+      },
+    ]);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to retrieve cross-rail cases', message: err.message });
+  }
+});
+
+app.get('/api/v1/crossrail/case/:caseId', (req: Request, res: Response) => {
+  try {
+    if (req.params.caseId === PRIMARY_CROSS_RAIL_CASE.caseId || req.params.caseId === 'primary') {
+      return res.json(PRIMARY_CROSS_RAIL_CASE);
+    }
+    return res.status(404).json({ error: 'Cross-rail case not found' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to retrieve cross-rail case', message: err.message });
+  }
+});
+
+app.post('/api/v1/crossrail/evaluate-bridge', (req: Request, res: Response) => {
+  try {
+    const bridge = CrossRailEngine.evaluateBridge(req.body);
+    res.json(bridge);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Bridge evaluation failed', message: err.message });
+  }
+});
+
+// Financial Crime Early Warning System Endpoints (Phase 6)
+const earlyWarningEngine = new EarlyWarningEngine([...INITIAL_EARLY_WARNINGS]);
+
+app.get('/api/v1/early-warning/alerts', (req: Request, res: Response) => {
+  try {
+    const { status } = req.query;
+    const alerts = earlyWarningEngine.getAlerts(status as any);
+    res.json(alerts);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to retrieve early warning alerts', message: err.message });
+  }
+});
+
+app.post('/api/v1/early-warning/alerts/:id/status', (req: Request, res: Response) => {
+  try {
+    const { status, actorName, actorRole, notes } = req.body;
+    const alert = earlyWarningEngine.updateAlertStatus(
+      req.params.id,
+      status,
+      actorName || CURRENT_INVESTIGATOR.name,
+      actorRole || CURRENT_INVESTIGATOR.role,
+      notes
+    );
+    res.json(alert);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to update alert status', message: err.message });
+  }
+});
+
+app.post('/api/v1/early-warning/evaluate-transaction', (req: Request, res: Response) => {
+  try {
+    const alert = earlyWarningEngine.evaluateTransaction(req.body);
+    res.json({ alertGenerated: Boolean(alert), alert });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Transaction evaluation failed', message: err.message });
+  }
+});
+
+app.get('/api/v1/early-warning/prioritized-cases', (_req: Request, res: Response) => {
+  try {
+    const complaintIds = dbComplaints.map(c => c.complaintNumber);
+    const prioritized = earlyWarningEngine.getPrioritizedCases(complaintIds);
+    res.json(prioritized);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to prioritize cases', message: err.message });
   }
 });
 
@@ -656,8 +938,9 @@ async function startServer() {
     app.use(vite.middlewares);
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[CyberTrace AI] Server active on http://0.0.0.0:${PORT}`);
+  // Listen only on localhost for local development
+  app.listen(PORT, 'localhost', () => {
+    console.log(`[FinTrace] Server active on http://localhost:${PORT}`);
   });
 }
 

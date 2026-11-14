@@ -22,6 +22,7 @@ import {
 } from '../types';
 import { executeWithdrawalPrediction } from '../utils/predictionEngine';
 import { computeAccountNetwork } from '../utils/graphAnalytics';
+import { IntelligentMuleDetectionEngine } from '../modules/muleDetection/muleDetectionEngine';
 
 // Helper for safe fetch with mock fallback
 async function fetchWithFallback<T>(url: string, options?: RequestInit, fallbackData?: T): Promise<T> {
@@ -310,6 +311,139 @@ export const api = {
         source: 'CyberTrace Forensic Intelligence Engine (Rule-based Fallback)',
       }
     );
+  },
+
+  // Intelligent Mule Detection API (Phase 2)
+  async getMuleDetection(complaintId?: string) {
+    const fallbackEngine = new IntelligentMuleDetectionEngine(INITIAL_ACCOUNTS, INITIAL_TRANSACTIONS);
+    const fallbackData = fallbackEngine.runFullMuleDetection();
+    const url = complaintId ? `/api/v1/mules?complaintId=${complaintId}` : '/api/v1/mules';
+    return fetchWithFallback(url, undefined, fallbackData);
+  },
+
+  async getMuleAccount(accountId: string) {
+    const fallbackEngine = new IntelligentMuleDetectionEngine(INITIAL_ACCOUNTS, INITIAL_TRANSACTIONS);
+    const fallbackData = fallbackEngine.analyzeAccount(accountId);
+    return fetchWithFallback(`/api/v1/mules/${accountId}`, undefined, fallbackData);
+  },
+
+  async updateMuleAction(accountId: string, data: { action?: string; note?: string; status?: string }) {
+    return fetchWithFallback(
+      `/api/v1/mules/${accountId}/action`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      },
+      { success: true, message: 'Action recorded locally' }
+    );
+  },
+
+  // Crypto Dataset API (Phase 3)
+  async getCryptoDatasetMetadata() {
+    return fetchWithFallback('/api/v1/crypto/dataset/metadata', undefined, {
+      datasetName: 'Elliptic Bitcoin Transaction Graph Dataset',
+      version: '1.0.0 (Research)',
+      sourceUrl: 'https://www.kaggle.com/datasets/ellipticco/elliptic-data-set',
+      paperCitation: 'Mark Weber et al., "Anti-Money Laundering in Bitcoin", KDD 2019',
+      isResearchDataset: true,
+      totalTransactions: 203769,
+      totalEdges: 234355,
+      classDistribution: {
+        illicit: 4545,
+        licit: 42019,
+        unknown: 157205,
+        illicitPercentage: '2.23%',
+        licitPercentage: '20.62%',
+        unknownPercentage: '77.15%',
+      },
+      timeStepRange: { min: 1, max: 49, totalTimeSteps: 49 },
+      featureDimensions: { totalColumns: 167, localFeatures: 93, aggregatedFeatures: 72 },
+    });
+  },
+
+  async getCryptoDatasetSample() {
+    return fetchWithFallback('/api/v1/crypto/dataset/sample', undefined, {
+      metadata: {},
+      nodes: [],
+      edges: [],
+    });
+  },
+
+  async getCryptoTransaction(txId: string) {
+    return fetchWithFallback(`/api/v1/crypto/dataset/transaction/${txId}`, undefined, null);
+  },
+
+  // Crypto Forensics API (Phase 4)
+  async getCryptoForensicsOverview() {
+    return fetchWithFallback('/api/v1/crypto/forensics/overview', undefined, null);
+  },
+
+  async getCryptoForensicsTransaction(txId: string) {
+    return fetchWithFallback(`/api/v1/crypto/forensics/transaction/${txId}`, undefined, null);
+  },
+
+  async getCryptoForensicsPathway(from: string, to: string) {
+    return fetchWithFallback(`/api/v1/crypto/forensics/pathway?from=${from}&to=${to}`, undefined, null);
+  },
+
+  async getCryptoForensicsBenchmark() {
+    return fetchWithFallback('/api/v1/crypto/forensics/benchmark', undefined, null);
+  },
+
+  // Cross-Rail Financial Pathway Reconstruction API (Phase 5)
+  async getCrossRailCases() {
+    return fetchWithFallback('/api/v1/crossrail/cases', undefined, []);
+  },
+
+  async getCrossRailCase(caseId: string) {
+    return fetchWithFallback(`/api/v1/crossrail/case/${caseId}`, undefined, null);
+  },
+
+  async evaluateCrossRailBridge(bridgeData: any) {
+    return fetchWithFallback(
+      '/api/v1/crossrail/evaluate-bridge',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bridgeData),
+      },
+      null
+    );
+  },
+
+  // Financial Crime Prevention & Early Warning API (Phase 6)
+  async getEarlyWarningAlerts(status?: string) {
+    const url = status ? `/api/v1/early-warning/alerts?status=${status}` : '/api/v1/early-warning/alerts';
+    return fetchWithFallback(url, undefined, []);
+  },
+
+  async updateEarlyWarningStatus(alertId: string, status: string, notes?: string) {
+    return fetchWithFallback(
+      `/api/v1/early-warning/alerts/${alertId}/status`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, notes }),
+      },
+      null
+    );
+  },
+
+  async evaluateTransactionWarning(transactionData: any) {
+    return fetchWithFallback(
+      '/api/v1/early-warning/evaluate-transaction',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(transactionData),
+      },
+      null
+    );
+  },
+
+  async getPrioritizedCases() {
+    return fetchWithFallback('/api/v1/early-warning/prioritized-cases', undefined, []);
   },
 
   // Reset Demo

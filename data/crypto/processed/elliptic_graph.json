@@ -1,0 +1,542 @@
+{
+  "metadata": {
+    "datasetName": "Elliptic Bitcoin Transaction Graph Dataset",
+    "version": "1.0.0 (Research)",
+    "sourceUrl": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set",
+    "paperCitation": "Mark Weber et al., \"Anti-Money Laundering in Bitcoin\", KDD 2019",
+    "isResearchDataset": true,
+    "totalTransactions": 15,
+    "totalEdges": 12,
+    "classDistribution": {
+      "illicit": 5,
+      "licit": 5,
+      "unknown": 5,
+      "illicitPercentage": "33.33%",
+      "licitPercentage": "33.33%",
+      "unknownPercentage": "33.33%"
+    },
+    "timeStepRange": {
+      "min": 1,
+      "max": 5,
+      "totalTimeSteps": 5
+    },
+    "featureDimensions": {
+      "totalColumns": 167,
+      "localFeatures": 93,
+      "aggregatedFeatures": 72
+    },
+    "fileChecksums": {
+      "elliptic_txs_classes.sample.csv": "3ded5af6500243f78fa91252f6a4120326f377ad88b3dd9c051cc767e42ecdac",
+      "elliptic_txs_edgelist.sample.csv": "db31d96d541924333943d6f0413ebee56776c89ec56bd39729c72472641dad53",
+      "elliptic_txs_features.sample.csv": "fff4444e2c05b6733894194c30b7746ac44b0e6e276fb1da1bbd847df92887af"
+    },
+    "importedAt": "2026-11-13T20:54:05.705Z",
+    "provenance": "Processed via FinTrace Elliptic Ingestion Pipeline v1.0.0 from samples",
+    "license": "CC BY-NC 4.0 (Non-Commercial Research)",
+    "complianceNotice": "CRITICAL: Research dataset labels do not establish real-world guilt, identity, or legal liability of wallet owners. Cryptocurrency forensics entities are maintained strictly isolated from banking records."
+  },
+  "nodesCount": 15,
+  "edgesCount": 12,
+  "nodes": [
+    {
+      "txId": "230425980",
+      "timeStep": 1,
+      "classLabel": "unknown",
+      "rawClass": "unknown",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": false,
+      "isUnknown": true,
+      "heuristicRiskScore": 50,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.14409,
+        "inflowProxy": -0.172904,
+        "outflowProxy": -0.111316,
+        "featureVectorSample": [
+          -0.14409,
+          -0.172904,
+          -0.111316,
+          0.701984,
+          -0.127588
+        ]
+      }
+    },
+    {
+      "txId": "5530458",
+      "timeStep": 2,
+      "classLabel": "illicit",
+      "rawClass": "1",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": true,
+      "isLicit": false,
+      "isUnknown": false,
+      "heuristicRiskScore": 95,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.295964,
+        "inflowProxy": 0.111967,
+        "outflowProxy": 1.482769,
+        "featureVectorSample": [
+          -0.295964,
+          0.111967,
+          1.482769,
+          0.118712,
+          0.519378
+        ]
+      }
+    },
+    {
+      "txId": "232022460",
+      "timeStep": 3,
+      "classLabel": "illicit",
+      "rawClass": "1",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": true,
+      "isLicit": false,
+      "isUnknown": false,
+      "heuristicRiskScore": 95,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 0.293468,
+        "inflowProxy": -0.73114,
+        "outflowProxy": 0.111295,
+        "featureVectorSample": [
+          0.293468,
+          -0.73114,
+          0.111295,
+          -0.465195,
+          1.373494
+        ]
+      }
+    },
+    {
+      "txId": "232438397",
+      "timeStep": 4,
+      "classLabel": "licit",
+      "rawClass": "2",
+      "inDegree": 1,
+      "outDegree": 0,
+      "isIllicit": false,
+      "isLicit": true,
+      "isUnknown": false,
+      "heuristicRiskScore": 12,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 1.292362,
+        "inflowProxy": -0.495314,
+        "outflowProxy": 0.339733,
+        "featureVectorSample": [
+          1.292362,
+          -0.495314,
+          0.339733,
+          -0.511638,
+          0.106323
+        ]
+      }
+    },
+    {
+      "txId": "230460314",
+      "timeStep": 5,
+      "classLabel": "unknown",
+      "rawClass": "unknown",
+      "inDegree": 0,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": false,
+      "isUnknown": true,
+      "heuristicRiskScore": 50,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.785599,
+        "inflowProxy": -0.327372,
+        "outflowProxy": 0.501779,
+        "featureVectorSample": [
+          -0.785599,
+          -0.327372,
+          0.501779,
+          -0.019184,
+          0.123745
+        ]
+      }
+    },
+    {
+      "txId": "230459870",
+      "timeStep": 1,
+      "classLabel": "unknown",
+      "rawClass": "unknown",
+      "inDegree": 1,
+      "outDegree": 0,
+      "isIllicit": false,
+      "isLicit": false,
+      "isUnknown": true,
+      "heuristicRiskScore": 50,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.140609,
+        "inflowProxy": 1.149492,
+        "outflowProxy": 0.272302,
+        "featureVectorSample": [
+          -0.140609,
+          1.149492,
+          0.272302,
+          -1.703361,
+          -1.083696
+        ]
+      }
+    },
+    {
+      "txId": "230133989",
+      "timeStep": 2,
+      "classLabel": "licit",
+      "rawClass": "2",
+      "inDegree": 0,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": true,
+      "isUnknown": false,
+      "heuristicRiskScore": 12,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.392907,
+        "inflowProxy": 0.232749,
+        "outflowProxy": -1.021859,
+        "featureVectorSample": [
+          -0.392907,
+          0.232749,
+          -1.021859,
+          0.0685,
+          0.246055
+        ]
+      }
+    },
+    {
+      "txId": "232338699",
+      "timeStep": 3,
+      "classLabel": "illicit",
+      "rawClass": "1",
+      "inDegree": 1,
+      "outDegree": 0,
+      "isIllicit": true,
+      "isLicit": false,
+      "isUnknown": false,
+      "heuristicRiskScore": 95,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.981088,
+        "inflowProxy": -0.746442,
+        "outflowProxy": 0.284502,
+        "featureVectorSample": [
+          -0.981088,
+          -0.746442,
+          0.284502,
+          0.015266,
+          -0.491357
+        ]
+      }
+    },
+    {
+      "txId": "230460315",
+      "timeStep": 4,
+      "classLabel": "licit",
+      "rawClass": "2",
+      "inDegree": 0,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": true,
+      "isUnknown": false,
+      "heuristicRiskScore": 12,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 1.057265,
+        "inflowProxy": -1.78467,
+        "outflowProxy": 0.880859,
+        "featureVectorSample": [
+          1.057265,
+          -1.78467,
+          0.880859,
+          0.212925,
+          0.054214
+        ]
+      }
+    },
+    {
+      "txId": "230460316",
+      "timeStep": 5,
+      "classLabel": "unknown",
+      "rawClass": "unknown",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": false,
+      "isUnknown": true,
+      "heuristicRiskScore": 50,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 1.273878,
+        "inflowProxy": -1.368062,
+        "outflowProxy": 0.685021,
+        "featureVectorSample": [
+          1.273878,
+          -1.368062,
+          0.685021,
+          -0.175235,
+          0.236325
+        ]
+      }
+    },
+    {
+      "txId": "230460317",
+      "timeStep": 1,
+      "classLabel": "illicit",
+      "rawClass": "1",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": true,
+      "isLicit": false,
+      "isUnknown": false,
+      "heuristicRiskScore": 95,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -0.764893,
+        "inflowProxy": -0.406142,
+        "outflowProxy": 0.096718,
+        "featureVectorSample": [
+          -0.764893,
+          -0.406142,
+          0.096718,
+          -1.170476,
+          -1.170277
+        ]
+      }
+    },
+    {
+      "txId": "230460318",
+      "timeStep": 2,
+      "classLabel": "licit",
+      "rawClass": "2",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": true,
+      "isUnknown": false,
+      "heuristicRiskScore": 12,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 2.448647,
+        "inflowProxy": -0.623076,
+        "outflowProxy": 1.299275,
+        "featureVectorSample": [
+          2.448647,
+          -0.623076,
+          1.299275,
+          0.362505,
+          -0.236699
+        ]
+      }
+    },
+    {
+      "txId": "230460319",
+      "timeStep": 3,
+      "classLabel": "unknown",
+      "rawClass": "unknown",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": false,
+      "isUnknown": true,
+      "heuristicRiskScore": 50,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 0.210571,
+        "inflowProxy": 0.154809,
+        "outflowProxy": -1.273756,
+        "featureVectorSample": [
+          0.210571,
+          0.154809,
+          -1.273756,
+          -0.898621,
+          1.566425
+        ]
+      }
+    },
+    {
+      "txId": "230460320",
+      "timeStep": 4,
+      "classLabel": "licit",
+      "rawClass": "2",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": false,
+      "isLicit": true,
+      "isUnknown": false,
+      "heuristicRiskScore": 12,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": -1.776339,
+        "inflowProxy": -1.123965,
+        "outflowProxy": -1.62593,
+        "featureVectorSample": [
+          -1.776339,
+          -1.123965,
+          -1.62593,
+          0.026671,
+          -0.442288
+        ]
+      }
+    },
+    {
+      "txId": "230460321",
+      "timeStep": 5,
+      "classLabel": "illicit",
+      "rawClass": "1",
+      "inDegree": 1,
+      "outDegree": 1,
+      "isIllicit": true,
+      "isLicit": false,
+      "isUnknown": false,
+      "heuristicRiskScore": 95,
+      "provenance": {
+        "dataset": "Elliptic Bitcoin Transaction Dataset",
+        "source": "Kaggle (ellipticco/elliptic-data-set)",
+        "isResearchData": true,
+        "verifiedAt": "2026-11-13T20:54:05.702Z"
+      },
+      "localFeaturesSummary": {
+        "feeProxy": 1.346147,
+        "inflowProxy": -0.735737,
+        "outflowProxy": -1.702576,
+        "featureVectorSample": [
+          1.346147,
+          -0.735737,
+          -1.702576,
+          -0.478966,
+          -1.34991
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "sourceTxId": "230425980",
+      "targetTxId": "5530458"
+    },
+    {
+      "sourceTxId": "232022460",
+      "targetTxId": "232438397"
+    },
+    {
+      "sourceTxId": "230460314",
+      "targetTxId": "230459870"
+    },
+    {
+      "sourceTxId": "230133989",
+      "targetTxId": "232338699"
+    },
+    {
+      "sourceTxId": "230460315",
+      "targetTxId": "230460316"
+    },
+    {
+      "sourceTxId": "230460316",
+      "targetTxId": "230460317"
+    },
+    {
+      "sourceTxId": "230460317",
+      "targetTxId": "230460318"
+    },
+    {
+      "sourceTxId": "230460318",
+      "targetTxId": "230460319"
+    },
+    {
+      "sourceTxId": "230460319",
+      "targetTxId": "230460320"
+    },
+    {
+      "sourceTxId": "230460320",
+      "targetTxId": "230460321"
+    },
+    {
+      "sourceTxId": "230460321",
+      "targetTxId": "230425980"
+    },
+    {
+      "sourceTxId": "5530458",
+      "targetTxId": "232022460"
+    }
+  ]
+}

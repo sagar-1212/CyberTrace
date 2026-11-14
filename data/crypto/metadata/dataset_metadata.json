@@ -1,0 +1,36 @@
+{
+  "datasetName": "Elliptic Bitcoin Transaction Graph Dataset",
+  "version": "1.0.0 (Research)",
+  "sourceUrl": "https://www.kaggle.com/datasets/ellipticco/elliptic-data-set",
+  "paperCitation": "Mark Weber et al., \"Anti-Money Laundering in Bitcoin\", KDD 2019",
+  "isResearchDataset": true,
+  "totalTransactions": 15,
+  "totalEdges": 12,
+  "classDistribution": {
+    "illicit": 5,
+    "licit": 5,
+    "unknown": 5,
+    "illicitPercentage": "33.33%",
+    "licitPercentage": "33.33%",
+    "unknownPercentage": "33.33%"
+  },
+  "timeStepRange": {
+    "min": 1,
+    "max": 5,
+    "totalTimeSteps": 5
+  },
+  "featureDimensions": {
+    "totalColumns": 167,
+    "localFeatures": 93,
+    "aggregatedFeatures": 72
+  },
+  "fileChecksums": {
+    "elliptic_txs_classes.sample.csv": "3ded5af6500243f78fa91252f6a4120326f377ad88b3dd9c051cc767e42ecdac",
+    "elliptic_txs_edgelist.sample.csv": "db31d96d541924333943d6f0413ebee56776c89ec56bd39729c72472641dad53",
+    "elliptic_txs_features.sample.csv": "fff4444e2c05b6733894194c30b7746ac44b0e6e276fb1da1bbd847df92887af"
+  },
+  "importedAt": "2026-11-13T20:54:05.705Z",
+  "provenance": "Processed via FinTrace Elliptic Ingestion Pipeline v1.0.0 from samples",
+  "license": "CC BY-NC 4.0 (Non-Commercial Research)",
+  "complianceNotice": "CRITICAL: Research dataset labels do not establish real-world guilt, identity, or legal liability of wallet owners. Cryptocurrency forensics entities are maintained strictly isolated from banking records."
+}

@@ -9,7 +9,13 @@
     "start": "tsx server.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:all": "tsx src/tests/masterIntegrationVerification.ts",
+    "test:mule": "tsx src/modules/muleDetection/testMuleDetection.ts",
+    "test:crypto:dataset": "tsx src/modules/cryptoDataset/testCryptoDataset.ts",
+    "test:crypto:forensics": "tsx src/modules/cryptoForensics/testCryptoForensics.ts",
+    "test:crossrail": "tsx src/modules/crossRail/testCrossRail.ts",
+    "test:earlywarning": "tsx src/modules/earlyWarning/testEarlyWarning.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

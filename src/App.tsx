@@ -20,6 +20,9 @@ import { SettingsPage } from './pages/SettingsPage';
 import { LoginPage } from './pages/LoginPage';
 import { BankNodalDeskPage } from './pages/BankNodalDeskPage';
 import { I4cNationalDeskPage } from './pages/I4cNationalDeskPage';
+import { MuleDetectionPage } from './modules/muleDetection/MuleDetectionPage';
+import { CryptoForensicsPage } from './modules/cryptoForensics/CryptoForensicsPage';
+import { CrossRailPathwayPage } from './modules/crossRail/CrossRailPathwayPage';
 
 import {
   ATM_LOCATIONS,
@@ -379,6 +382,16 @@ export default function App() {
             />
           )}
 
+          {currentTab === 'mule_detection' && (
+            <MuleDetectionPage
+              accounts={accounts}
+              transactions={transactions}
+              activeComplaint={activeComplaint}
+              onNavigateTab={setCurrentTab}
+              onFreezeRequest={handleFreezeRequest}
+            />
+          )}
+
           {currentTab === 'network' && (
             <NetworkGraphPage
               accounts={accounts}
@@ -455,6 +468,14 @@ export default function App() {
               onSelectComplaint={(c) => setActiveComplaint(c)}
               onNavigateTab={setCurrentTab}
             />
+          )}
+
+          {currentTab === 'crypto_forensics' && (
+            <CryptoForensicsPage onNavigateTab={setCurrentTab} />
+          )}
+
+          {currentTab === 'cross_rail' && (
+            <CrossRailPathwayPage />
           )}
 
           {currentTab === 'bank_desk' && (
